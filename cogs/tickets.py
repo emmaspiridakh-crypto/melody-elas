@@ -42,7 +42,7 @@ class TicketPanelView(discord.ui.LayoutView):
             discord.ui.TextDisplay(
                 "## 🎫 Ticket Panel\n"
                 "Πάτησε το κατάλληλο κουμπί ανάλογα με το λόγο επικοινωνίας σου.\n\n"
-                f"{config.EMOJI_SUPPORT} **Support** — για γενικά θέματα/βοήθεια"
+                f"{config.EMOJI_SUPPORT} **Support** — για γενικά θέματα/βοήθεια (το βλέπει το Staff)\n"
                 f"{config.EMOJI_CONTACT} **Επικοινωνία Διοίκησης** — για σοβαρά θέματα (το βλέπει η Ανώτατη Διοίκηση)"
             ),
             accessory=discord.ui.Thumbnail(media=config.TICKET_PANEL_THUMBNAIL),
@@ -75,13 +75,18 @@ class TicketPanelView(discord.ui.LayoutView):
 # View μέσα στο ticket channel — Close + Ping User (Components V2)
 # ─────────────────────────────────────────────────────────────
 class TicketControlView(discord.ui.LayoutView):
-    def __init__(self):
+    def __init__(self, mention_text: str | None = None):
         super().__init__(timeout=None)
 
         container = discord.ui.Container(accent_colour=discord.Colour.blurple())
-        container.add_item(
-            discord.ui.TextDisplay(f"{config.EMOJI_TICKET} **Ticket Controls**")
-        )
+
+        header = f"{config.EMOJI_TICKET} **Ticket Controls**"
+        if mention_text:
+            # Components V2 δεν επιτρέπει content= μαζί με view=,
+            # οπότε το mention μπαίνει μέσα στο ίδιο το TextDisplay.
+            header = f"{mention_text}\n\n{header}"
+
+        container.add_item(discord.ui.TextDisplay(header))
 
         row = discord.ui.ActionRow()
         row.add_item(
@@ -156,10 +161,8 @@ class Tickets(commands.Cog):
 
         await db.create_ticket(channel.id, guild.id, interaction.user.id, ticket_type)
 
-        await channel.send(
-            content=f"{interaction.user.mention}" + (f" | {role.mention}" if role else ""),
-            view=TicketControlView(),
-        )
+        mention_text = f"{interaction.user.mention}" + (f" | {role.mention}" if role else "")
+        await channel.send(view=TicketControlView(mention_text=mention_text))
 
         await interaction.response.send_message(f"✅ Άνοιξε το ticket σου: {channel.mention}", ephemeral=True)
 
