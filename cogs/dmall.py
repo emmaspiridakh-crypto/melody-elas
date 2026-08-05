@@ -24,11 +24,11 @@ class DMAll(commands.Cog):
     @commands.command(name="dmall")
     @is_owner_or_admin()
     async def dmall(self, ctx: commands.Context, *, message: str):
-        """!dmall <μήνυμα> — στέλνει DM σε όλα τα μέλη του server (μόνο αρχηγός/διοικητής)."""
+        """!dmall <μήνυμα> — στέλνει DM σε όλα τα μέλη του server."""
         guild = ctx.guild
         sent, failed = 0, 0
 
-        status_msg = await ctx.send(f"📨 Ξεκινάει η αποστολή σε **{guild.member_count}** μέλη...")
+        status_msg = await ctx.send(f"Στέλνετε περίμενε μπαγάσα")
 
         embed = discord.Embed(
             title=f"📢 Μήνυμα από {guild.name}",
