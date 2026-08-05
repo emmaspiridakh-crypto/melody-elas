@@ -17,23 +17,23 @@ STAFF_ROLE_ID =  1531030566479335426       # βλέπει τα "Support" tickets
 ANOTATH_DIOIKISI_ROLE_ID = 1534468753968988190  # βλέπει τα "Επικοινωνία Διοίκησης" tickets
 
 # Emoji (placeholders — αντικατέστησέ τα με τα δικά σου custom emojis)
-EMOJI_SUPPORT = "<:support:>"
-EMOJI_CONTACT = "<:contact:>"
-EMOJI_CLOSE = "<:close:>"
-EMOJI_PING = "<:ping:>"
-EMOJI_TICKET = "<:ticket:>"
-EMOJI_DUTY_ON = "<:duty_on:>"
-EMOJI_DUTY_OFF = "<:duty_off:>"
-EMOJI_LIST = "<:list:>"
-EMOJI_LEADERBOARD = "<:leaderboard:>"
-EMOJI_CLOCK = "<:clock:>"
+EMOJI_SUPPORT = "<a:support:1534476690108186665>"
+EMOJI_CONTACT = "<:contact:1534476798824415262>"
+EMOJI_CLOSE = "<:close:1534476941594202243>"
+EMOJI_PING = "<a:ping:1534477033017704529>"
+EMOJI_TICKET = "<:ticket:1534477079377084536>"
+EMOJI_DUTY_ON = "<a:duty_on:1534477124843475114>"
+EMOJI_DUTY_OFF = "<a:duty_off:1534477144271360130>"
+EMOJI_LIST = "<:list:1534477214047801344>"
+EMOJI_LEADERBOARD = "<:leaderboard:1534480843274194954>"
+EMOJI_CLOCK = "<:clock:1534480904637120545>"
 
 # Thumbnail/εικόνα για τα panels (URLs — άλλαξέ τα)
-TICKET_PANEL_THUMBNAIL = ""
-DUTY_PANEL_THUMBNAIL = ""
+TICKET_PANEL_THUMBNAIL = "https://i.imgur.com/0Vc7sWw.gif"
+DUTY_PANEL_THUMBNAIL = "https://i.imgur.com/0Vc7sWw.gif"
 
 # Banner που εμφανίζεται πάνω-πάνω στο ticket panel
-TICKET_PANEL_BANNER = ""
+TICKET_PANEL_BANNER = "https://i.imgur.com/jiBdco2.jpeg"
 
 # ─── Duty System ────────────────────────────────────────────
 ON_DUTY_ROLE_ID = 1534475721920090193   # ο role που παίρνει κάποιος όταν πατάει ON
