@@ -61,6 +61,7 @@ COLOR_COMMAND = 0x99AAB5
 COLOR_DMALL = 0x2ECC71
 COLOR_TICKET = 0x3498DB
 
+EMBED_COLOR = 0x3498db
 # ─── Database (Turso) ───────────────────────────────────────
 # Βάζονται μέσω environment variables (.env / Render):
 # TURSO_DATABASE_URL=libsql://xxxx.turso.io
