@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import discord
 from discord import app_commands
@@ -166,14 +167,8 @@ class Tickets(commands.Cog):
 
         await interaction.response.send_message(f"✅ Άνοιξε το ticket σου: {channel.mention}", ephemeral=True)
 
-        log_ch = interaction.guild.get_channel(config.LOG_CHANNELS.get("ticket"))
-        if log_ch:
-            embed = discord.Embed(
-                title="🎫 Νέο Ticket",
-                description=f"**Χρήστης:** {interaction.user.mention}\n**Τύπος:** {info['label']}\n**Κανάλι:** {channel.mention}",
-                color=config.COLOR_TICKET,
-            )
-            await log_ch.send(embed=embed)
+        # Logging (χειρίζεται το logging_cog, ίδιο style με τα υπόλοιπα logs)
+        self.bot.dispatch("ticket_open", interaction, channel, info["label"])
 
     async def _close_ticket(self, interaction: discord.Interaction):
         ticket = await db.get_ticket(interaction.channel.id)
@@ -184,16 +179,10 @@ class Tickets(commands.Cog):
         await db.close_ticket(interaction.channel.id)
         await interaction.response.send_message("🔒 Το ticket κλείνει σε 5 δευτερόλεπτα...")
 
-        log_ch = interaction.guild.get_channel(config.LOG_CHANNELS.get("ticket"))
-        if log_ch:
-            embed = discord.Embed(
-                title="🔒 Ticket Closed",
-                description=f"**Κανάλι:** {interaction.channel.name}\n**Έκλεισε από:** {interaction.user.mention}",
-                color=config.COLOR_TICKET,
-            )
-            await log_ch.send(embed=embed)
+        # Logging (χειρίζεται το logging_cog, ίδιο style με τα υπόλοιπα logs)
+        self.bot.dispatch("ticket_close", interaction, ticket)
 
-        await discord.utils.sleep_until(discord.utils.utcnow() + __import__("datetime").timedelta(seconds=5))
+        await asyncio.sleep(5)
         await interaction.channel.delete()
 
     async def _ping_user(self, interaction: discord.Interaction):
