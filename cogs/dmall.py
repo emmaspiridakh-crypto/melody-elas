@@ -50,14 +50,8 @@ class DMAll(commands.Cog):
 
         await status_msg.edit(content=f"✅ Ολοκληρώθηκε. Στάλθηκαν: **{sent}** | Απέτυχαν: **{failed}**")
 
-        log_ch = guild.get_channel(config.LOG_CHANNELS.get("dmall"))
-        if log_ch:
-            log_embed = discord.Embed(
-                title="📨 DM All",
-                description=f"**Από:** {ctx.author.mention}\n**Στάλθηκαν:** {sent}\n**Απέτυχαν:** {failed}\n\n**Μήνυμα:**\n{message}",
-                color=config.COLOR_DMALL,
-            )
-            await log_ch.send(embed=log_embed)
+        # Logging (χειρίζεται το logging_cog, ίδιο style με τα υπόλοιπα logs)
+        self.bot.dispatch("dmall_sent", ctx, sent, failed, message)
 
     @dmall.error
     async def dmall_error(self, ctx: commands.Context, error):
