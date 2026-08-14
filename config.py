@@ -39,16 +39,11 @@ TICKET_PANEL_BANNER = "https://i.imgur.com/jiBdco2.jpeg"
 ON_DUTY_ROLE_ID = 1534475721920090193   # ο role που παίρνει κάποιος όταν πατάει ON
 
 # ─── Logs — βάλε το ID του αντίστοιχου text channel για κάθε κατηγορία ──────
-LOG_CHANNELS = {
-    "join_leave": 1531030862169243849,
-    "role": 1531030872415797288,
-    "voice": 1531030865407377540,
-    "message": 1531030863809220760,
-    "channel": 1531030874135462111,
-    "commands": 1531030859321180344,
-    "dmall": 1531030859321180344,
-    "ticket": 1531030867106074674,
-}
+LOG_MESSAGES_CHANNEL_ID = 1531030863809220760
+LOG_JOIN_LEAVE_CHANNEL_ID = 1531030862169243849 
+LOG_ROLES_CHANNEL_ID = 1531030872415797288
+LOG_CHANNELS_CHANNEL_ID = 1531030874135462111
+LOG_VOICE_CHANNEL_ID = 1531030865407377540
 
 # Χρώματα embeds (μπορείς να τα αλλάξεις ελεύθερα)
 COLOR_JOIN = 0x57F287
