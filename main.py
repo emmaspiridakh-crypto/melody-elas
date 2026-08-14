@@ -30,9 +30,9 @@ EXTENSIONS = [
     "cogs.tickets",
     "cogs.duty",
     "cogs.dmall",
+    "cogs.autorole",
     "cogs.logging_cog",
 ]
-
 
 @bot.event
 async def setup_hook():
