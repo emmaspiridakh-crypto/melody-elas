@@ -24,24 +24,18 @@ TICKET_TYPES = {
     },
 }
 
-
-# ─────────────────────────────────────────────────────────────
-# Panel (Components V2) — LayoutView με Container/Section/Thumbnail
-# ─────────────────────────────────────────────────────────────
 class TicketPanelView(discord.ui.LayoutView):
     def __init__(self):
         super().__init__(timeout=None)
 
         container = discord.ui.Container(accent_colour=discord.Colour.blurple())
-
-        # Banner πάνω-πάνω, πριν από οτιδήποτε άλλο
         gallery = discord.ui.MediaGallery()
         gallery.add_item(media=config.TICKET_PANEL_BANNER)
         container.add_item(gallery)
 
         section = discord.ui.Section(
             discord.ui.TextDisplay(
-                "## 🎫 Ticket Panel\n"
+                "# Ticket Panel\n"
                 "Πάτησε το κατάλληλο κουμπί ανάλογα με το λόγο επικοινωνίας σου.\n\n"
                 f"{config.EMOJI_SUPPORT} **Support** — για γενικά θέματα/βοήθεια (το βλέπει το Staff)\n"
                 f"{config.EMOJI_CONTACT} **Επικοινωνία Διοίκησης** — για σοβαρά θέματα (το βλέπει η Ανώτατη Διοίκηση)"
@@ -71,10 +65,6 @@ class TicketPanelView(discord.ui.LayoutView):
 
         self.add_item(container)
 
-
-# ─────────────────────────────────────────────────────────────
-# View μέσα στο ticket channel — Close + Ping User (Components V2)
-# ─────────────────────────────────────────────────────────────
 class TicketControlView(discord.ui.LayoutView):
     def __init__(self, mention_text: str | None = None):
         super().__init__(timeout=None)
@@ -83,8 +73,6 @@ class TicketControlView(discord.ui.LayoutView):
 
         header = f"{config.EMOJI_TICKET} **Ticket Controls**"
         if mention_text:
-            # Components V2 δεν επιτρέπει content= μαζί με view=,
-            # οπότε το mention μπαίνει μέσα στο ίδιο το TextDisplay.
             header = f"{mention_text}\n\n{header}"
 
         container.add_item(discord.ui.TextDisplay(header))
@@ -115,14 +103,12 @@ class Tickets(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    # ── Slash command για να στείλεις το panel σε ένα κανάλι ──
     @app_commands.command(name="ticketpanel", description="Στέλνει το ticket panel σε αυτό το κανάλι.")
     @app_commands.checks.has_permissions(administrator=True)
     async def ticketpanel(self, interaction: discord.Interaction):
         await interaction.channel.send(view=TicketPanelView())
         await interaction.response.send_message("✅ Το ticket panel στάλθηκε.", ephemeral=True)
 
-    # ── Listener για όλα τα button interactions του ticket system ──
     @commands.Cog.listener()
     async def on_interaction(self, interaction: discord.Interaction):
         if interaction.type != discord.InteractionType.component:
@@ -167,7 +153,6 @@ class Tickets(commands.Cog):
 
         await interaction.response.send_message(f"✅ Άνοιξε το ticket σου: {channel.mention}", ephemeral=True)
 
-        # Logging (χειρίζεται το logging_cog, ίδιο style με τα υπόλοιπα logs)
         self.bot.dispatch("ticket_open", interaction, channel, info["label"])
 
     async def _close_ticket(self, interaction: discord.Interaction):
@@ -179,7 +164,6 @@ class Tickets(commands.Cog):
         await db.close_ticket(interaction.channel.id)
         await interaction.response.send_message("🔒 Το ticket κλείνει σε 5 δευτερόλεπτα...")
 
-        # Logging (χειρίζεται το logging_cog, ίδιο style με τα υπόλοιπα logs)
         self.bot.dispatch("ticket_close", interaction, ticket)
 
         await asyncio.sleep(5)
