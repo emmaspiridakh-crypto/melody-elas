@@ -1,12 +1,3 @@
-"""
-Turso (libsql) database layer.
-
-Σημείωση deploy: στο Render μερικές φορές το libsql websocket client έχει
-προβλήματα με το πρωτόκολλο `libsql://`. Αν συναντήσεις connection errors,
-δοκίμασε να περάσεις το URL ως `https://` αντί για `libsql://` στο
-TURSO_DATABASE_URL.
-"""
-
 import os
 import time
 import logging
@@ -19,8 +10,6 @@ _client: libsql_client.Client | None = None
 
 def _get_url() -> str:
     url = os.environ.get("TURSO_DATABASE_URL", "")
-    # Fallback fix: αν δίνει πρόβλημα το libsql:// πρωτόκολλο στο Render,
-    # το μετατρέπουμε σε https://
     if url.startswith("libsql://") and os.environ.get("TURSO_FORCE_HTTPS", "0") == "1":
         url = url.replace("libsql://", "https://", 1)
     return url
@@ -71,9 +60,6 @@ def client() -> libsql_client.Client:
         raise RuntimeError("Database δεν έχει αρχικοποιηθεί ακόμα — κάλεσε init_db() πρώτα.")
     return _client
 
-
-# ── Tickets ──────────────────────────────────────────────────
-
 async def create_ticket(channel_id: int, guild_id: int, user_id: int, ticket_type: str):
     await client().execute(
         "INSERT INTO tickets (channel_id, guild_id, user_id, ticket_type, status, created_at) "
@@ -105,9 +91,6 @@ async def get_ticket(channel_id: int):
         "status": row[4],
     }
 
-
-# ── Duty system ──────────────────────────────────────────────
-
 async def start_duty(user_id: int, guild_id: int):
     await client().execute(
         "INSERT INTO duty_sessions (user_id, guild_id, start_time) VALUES (?, ?, ?)",
@@ -116,7 +99,6 @@ async def start_duty(user_id: int, guild_id: int):
 
 
 async def end_duty(user_id: int, guild_id: int) -> int:
-    """Κλείνει το πιο πρόσφατο ανοιχτό session και επιστρέφει τη διάρκεια σε δευτερόλεπτα."""
     rs = await client().execute(
         "SELECT id, start_time FROM duty_sessions "
         "WHERE user_id = ? AND guild_id = ? AND end_time IS NULL "
@@ -152,7 +134,6 @@ async def is_on_duty(user_id: int, guild_id: int) -> bool:
 
 
 async def get_active_duty_users(guild_id: int) -> list[tuple[int, int]]:
-    """Επιστρέφει [(user_id, start_time), ...] για όσους είναι on duty τώρα."""
     rs = await client().execute(
         "SELECT user_id, start_time FROM duty_sessions WHERE guild_id = ? AND end_time IS NULL",
         [guild_id],
@@ -161,7 +142,6 @@ async def get_active_duty_users(guild_id: int) -> list[tuple[int, int]]:
 
 
 async def get_leaderboard(guild_id: int, limit: int = 10) -> list[tuple[int, int]]:
-    """Επιστρέφει [(user_id, total_seconds), ...] ταξινομημένο φθίνουσα."""
     rs = await client().execute(
         "SELECT user_id, total_seconds FROM duty_totals "
         "WHERE guild_id = ? ORDER BY total_seconds DESC LIMIT ?",
