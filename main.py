@@ -45,7 +45,6 @@ async def setup_hook():
         except Exception as e:
             log.error(f"Failed to load {ext}: {e}")
 
-    # Persistent views — απαραίτητο για να δουλεύουν τα κουμπιά μετά από restart
     bot.add_view(TicketPanelView())
     bot.add_view(TicketControlView())
     bot.add_view(DutyPanelView())
@@ -63,7 +62,7 @@ async def on_ready():
 
 
 if __name__ == "__main__":
-    keep_alive()  # Flask server σε ξεχωριστό thread (για Render + UptimeRobot)
+    keep_alive() 
     if not TOKEN:
         raise RuntimeError("Λείπει το DISCORD_TOKEN από τα environment variables.")
     bot.run(TOKEN)
