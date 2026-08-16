@@ -137,9 +137,6 @@ class LoggingEvents(commands.Cog):
         embed.add_field(name="Ώρα", value=discord.utils.format_dt(datetime.datetime.now(datetime.timezone.utc), style="F"), inline=False)
         await _send(member.guild, config.LOG_VOICE_CHANNEL_ID, embed)
 
-    # ─────────────────────────────────────────────────────────
-    # Ticket logs (dispatched από το cogs/tickets.py)
-    # ─────────────────────────────────────────────────────────
     @commands.Cog.listener()
     async def on_ticket_open(self, interaction: discord.Interaction, channel: discord.TextChannel, ticket_type_label: str):
         embed = _base_embed(interaction.guild, title="🎫 Νέο Ticket", color=config.COLOR_TICKET)
@@ -163,9 +160,6 @@ class LoggingEvents(commands.Cog):
         embed.add_field(name="Ώρα", value=discord.utils.format_dt(datetime.datetime.now(datetime.timezone.utc), style="F"), inline=False)
         await _send(interaction.guild, config.LOG_TICKET_CHANNEL_ID, embed)
 
-    # ─────────────────────────────────────────────────────────
-    # DM All logs (dispatched από το cogs/dmall.py)
-    # ─────────────────────────────────────────────────────────
     @commands.Cog.listener()
     async def on_dmall_sent(self, ctx: commands.Context, sent: int, failed: int, message: str):
         embed = _base_embed(ctx.guild, title="📨 DM All", color=config.COLOR_DMALL)
@@ -176,9 +170,6 @@ class LoggingEvents(commands.Cog):
         embed.add_field(name="Ώρα", value=discord.utils.format_dt(datetime.datetime.now(datetime.timezone.utc), style="F"), inline=False)
         await _send(ctx.guild, config.LOG_DMALL_CHANNEL_ID, embed)
 
-    # ─────────────────────────────────────────────────────────
-    # Command logs — prefix (!) commands
-    # ─────────────────────────────────────────────────────────
     @commands.Cog.listener()
     async def on_command_completion(self, ctx: commands.Context):
         if ctx.author.bot or not ctx.guild:
@@ -190,9 +181,6 @@ class LoggingEvents(commands.Cog):
         embed.add_field(name="Ώρα", value=discord.utils.format_dt(datetime.datetime.now(datetime.timezone.utc), style="F"), inline=False)
         await _send(ctx.guild, config.LOG_COMMANDS_CHANNEL_ID, embed)
 
-    # ─────────────────────────────────────────────────────────
-    # Command logs — slash (/) commands
-    # ─────────────────────────────────────────────────────────
     @commands.Cog.listener()
     async def on_interaction(self, interaction: discord.Interaction):
         if interaction.type != discord.InteractionType.application_command or not interaction.guild:
