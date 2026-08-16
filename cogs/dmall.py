@@ -24,7 +24,6 @@ class DMAll(commands.Cog):
     @commands.command(name="dmall")
     @is_owner_or_admin()
     async def dmall(self, ctx: commands.Context, *, message: str):
-        """!dmall <μήνυμα> — στέλνει DM σε όλα τα μέλη του server."""
         guild = ctx.guild
         sent, failed = 0, 0
 
@@ -46,11 +45,10 @@ class DMAll(commands.Cog):
                 failed += 1
             except discord.HTTPException:
                 failed += 1
-            await asyncio.sleep(0.7)  # αποφυγή rate limit
+            await asyncio.sleep(0.7) 
 
         await status_msg.edit(content=f"✅ Ολοκληρώθηκε. Στάλθηκαν: **{sent}** | Απέτυχαν: **{failed}**")
 
-        # Logging (χειρίζεται το logging_cog, ίδιο style με τα υπόλοιπα logs)
         self.bot.dispatch("dmall_sent", ctx, sent, failed, message)
 
     @dmall.error
